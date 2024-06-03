@@ -16,24 +16,55 @@ books = []
 
 @app.get("/books")
 def get_books():
-	pass
+	return{"book": books}
 
 @app.get("/books/{book_id}")
 def get_book(book_id: int):
-	pass
+	return{"books": books.index(book_id)}
+
+@app.get("/books/{book_title}")
+def get_books(book_title: str):
+	booksToReturn = []
+	for book in books:
+		if book["title"] == book_title:
+			booksToReturn.append(book)
+	return{"book": booksToReturn}
+
+@app.get("/books/{book_author}")
+def get_books(book_author: str):
+	booksToReturn = []
+	for book in books:
+		if book["author"] == book_author:
+			booksToReturn.append(book)
+	return{"book": booksToReturn}
+
+@app.get("/books/{book_published_date}")
+def get_books(book_published_date: str):
+	booksToReturn = []
+	for book in books:
+		if book["published_date"] == book_published_date:
+			booksToReturn.append(book)
+	return{"book": booksToReturn}
+
+@app.get("/books/{book_price}")
+def get_books(book_price: float):
+	booksToReturn = []
+	for book in books:
+		if book["price"] == book_price:
+			booksToReturn.append(book)
+	return{"book": booksToReturn}
 
 @app.post("/books")
 def create_book(book: Book):
-	pass
+	books.append(book)
 
 @app.put("/books/{book_id}")
 def update_book(book_id: int, book: Book):
-	pass
+	books.index(book_id).book = book
 
 @app.delete("/books/{book_id}")
 def delete_book(book_id: int):
-	pass
-
+	del books[book_id]
 client = TestClient(app)
 
 def test_create_book():
@@ -55,8 +86,3 @@ def test_delete_book():
 def test_get_books():
 	response = client.get("/books")
 	assert response.status_code == 200
-
-
-
-
-
